@@ -1230,7 +1230,7 @@ Periksa:
 
 ---
 
-## Tombol BMS Tidak Berfungsi
+## Ganti Mode Page 2
 
 Page button:
 
@@ -1238,33 +1238,14 @@ Page button:
 GPIO32 → Button → GND
 ```
 
-Firmware menggunakan:
-
-```cpp
-INPUT_PULLUP
-```
-
-Jadi:
-
-```text
-HIGH = tidak ditekan
-LOW  = ditekan
-```
-
 ---
 
-## Tombol Trip Tidak Berfungsi
+## Tombol Trip Reset
 
 Trip button:
 
 ```text
 GPIO33 → Button → GND
-```
-
-Konfigurasi:
-
-```cpp
-INPUT_PULLUP
 ```
 
 ---
