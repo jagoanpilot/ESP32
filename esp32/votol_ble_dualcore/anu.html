@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Fox R Modern EV Dashboard</title>
+
+<style>
+
+:root{
+  --bg:#071018;
+  --panel:#0b1822;
+  --line:#1d3544;
+  --text:#eef7ff;
+  --muted:#8da3b3;
+  --good:#52e38e;
+  --accent:#56c8ff;
+  --regen:#8e7dff;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  background:#111820;
+  font-family:Arial,Helvetica,sans-serif;
+  color:var(--text);
+}
+
+.screen{
+  width:480px;
+  height:320px;
+
+  background:
+  radial-gradient(
+    circle at 50% 40%,
+    #102532 0,
+    #071018 58%,
+    #04090d 100%
+  );
+
+  border:2px solid #273a46;
+  border-radius:16px;
+  overflow:hidden;
+
+  position:relative;
+
+  box-shadow:
+  0 18px 55px #0008;
+}
+
+.page{
+  width:100%;
+  height:100%;
+  padding:10px 12px;
+}
+
+/* ================= TOP ================= */
+
+.top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  height:28px;
+
+  font-size:13px;
+  color:var(--muted);
+}
+
+.soc{
+  display:flex;
+  align-items:center;
+  gap:7px;
+
+  font-weight:700;
+  color:var(--text);
+}
+
+.bat{
+  width:44px;
+  height:16px;
+
+  border:2px solid #8fa5b5;
+  border-radius:4px;
+
+  position:relative;
+}
+
+.bat:after{
+
+  content:"";
+
+  position:absolute;
+
+  right:-5px;
+  top:4px;
+
+  width:3px;
+  height:6px;
+
+  background:#8fa5b5;
+
+  border-radius:1px;
+}
+
+.batfill{
+
+  height:100%;
+
+  width:87%;
+
+  background:
+  linear-gradient(
+    90deg,
+    var(--good),
+    var(--accent)
+  );
+
+  border-radius:2px;
+}
+
+.gear{
+
+  font-size:24px;
+
+  font-weight:900;
+
+  color:var(--good);
+}
+
+/* ================= MAIN ================= */
+
+.main{
+
+  display:grid;
+
+  grid-template-columns:
+  100px 1fr 100px;
+
+  height:190px;
+
+  align-items:center;
+}
+
+.side{
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:16px;
+}
+
+.metric small{
+
+  display:block;
+
+  color:var(--muted);
+
+  font-size:10px;
+
+  letter-spacing:.6px;
+}
+
+.metric b{
+
+  font-size:21px;
+}
+
+/* ================= CENTER ================= */
+
+.center{
+
+  text-align:center;
+
+  position:relative;
+}
+
+.ring{
+
+  width:180px;
+  height:180px;
+
+  margin:auto;
+
+  border-radius:50%;
+
+  background:
+
+  conic-gradient(
+
+    var(--accent) 0 55deg,
+
+    #173241 55deg 120deg,
+
+    #16202a 120deg 240deg,
+
+    var(--regen) 240deg 270deg,
+
+    #173241 270deg 360deg
+
+  );
+
+  display:grid;
+
+  place-items:center;
+
+  box-shadow:
+
+  inset 0 0 0 15px #09151d;
+}
+
+.inner{
+
+  width:138px;
+  height:138px;
+
+  border-radius:50%;
+
+  background:#071018;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  justify-content:center;
+
+  box-shadow:
+
+  0 0 25px #56c8ff20 inset;
+}
+
+.speed{
+
+  font-size:56px;
+
+  line-height:.9;
+
+  font-weight:900;
+}
+
+.unit{
+
+  font-size:12px;
+
+  color:var(--muted);
+
+  margin-top:5px;
+}
+
+.power{
+
+  font-size:12px;
+
+  margin-top:6px;
+
+  color:var(--accent);
+}
+
+/* ================= BOTTOM ================= */
+
+.bottom{
+
+  display:grid;
+
+  grid-template-columns:
+  repeat(4,1fr);
+
+  gap:6px;
+}
+
+.tile{
+
+  background:#0c1b25;
+
+  border:1px solid #19313f;
+
+  border-radius:9px;
+
+  padding:7px 8px;
+
+  min-height:50px;
+}
+
+.tile small{
+
+  color:var(--muted);
+
+  font-size:9px;
+}
+
+.tile b{
+
+  display:block;
+
+  font-size:14px;
+
+  margin-top:4px;
+}
+
+.status{
+
+  position:absolute;
+
+  left:50%;
+
+  transform:
+  translateX(-50%);
+
+  bottom:5px;
+
+  font-size:9px;
+
+  color:#66808f;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="screen">
+
+<section class="page">
+
+<!-- ================= TOP ================= -->
+
+<div class="top">
+
+<div class="soc">
+
+<div class="bat">
+
+<div
+id="batfill"
+class="batfill">
+</div>
+
+</div>
+
+<span id="soc">
+87%
+</span>
+
+</div>
+
+<div id="clock">
+21:38
+</div>
+
+<div
+id="gear"
+class="gear">
+
+D
+
+</div>
+
+</div>
+
+<!-- ================= MAIN ================= -->
+
+<div class="main">
+
+<!-- LEFT -->
+
+<div class="side">
+
+<div class="metric">
+
+<small>
+PACK
+</small>
+
+<b id="voltage">
+76.8 V
+</b>
+
+</div>
+
+<div class="metric">
+
+<small>
+CURRENT
+</small>
+
+<b id="current">
+28.0 A
+</b>
+
+</div>
+
+<div class="metric">
+
+<small>
+EFFICIENCY
+</small>
+
+<b id="eff">
+31 Wh/km
+</b>
+
+</div>
+
+</div>
+
+<!-- CENTER -->
+
+<div class="center">
+
+<div class="ring">
+
+<div class="inner">
+
+<div
+id="speed"
+class="speed">
+
+64
+
+</div>
+
+<div class="unit">
+km/h
+</div>
+
+<div
+id="power"
+class="power">
+
+2.15 kW DRIVE
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- RIGHT -->
+
+<div
+class="side"
+style="text-align:right">
+
+<div class="metric">
+
+<small>
+RANGE
+</small>
+
+<b id="range">
+78 km
+</b>
+
+</div>
+
+<div class="metric">
+
+<small>
+RPM
+</small>
+
+<b id="rpm">
+2850
+</b>
+
+</div>
+
+<div class="metric">
+
+<small>
+TRIP
+</small>
+
+<b id="trip">
+12.4 km
+</b>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= BOTTOM ================= -->
+
+<div class="bottom">
+
+<div class="tile">
+
+<small>
+BAT TEMP
+</small>
+
+<b id="batTemp">
+34°C
+</b>
+
+</div>
+
+<div class="tile">
+
+<small>
+CTRL TEMP
+</small>
+
+<b id="ctrlTemp">
+41°C
+</b>
+
+</div>
+
+<div class="tile">
+
+<small>
+MOTOR TEMP
+</small>
+
+<b id="motorTemp">
+46°C
+</b>
+
+</div>
+
+<div class="tile">
+
+<small>
+ODO
+</small>
+
+<b id="odo">
+9925 km
+</b>
+
+</div>
+
+</div>
+
+<div class="status">
+
+FOX R MODERN EV DASHBOARD • SIMULATION
+
+</div>
+
+</section>
+
+</div>
+
+<script>
+
+/* ===============================
+   DATA SIMULATION
+================================ */
+
+let t = 0;
+
+let trip = 12.4;
+
+let odo = 9925;
+
+/* ===============================
+   UPDATE LOOP
+================================ */
+
+function updateDashboard(){
+
+t += 0.12;
+
+let phase = t % 36;
+
+let speed = 0;
+
+let gear = "P";
+
+let current = 0;
+
+/* PARK */
+
+if(phase < 5){
+
+gear = "P";
+
+speed = 0;
+
+current = 0.4;
+
+}
+
+/* ACCELERATION */
+
+else if(phase < 16){
+
+gear = "D";
+
+speed =
+((phase - 5) / 11) * 72;
+
+current =
+
+10 +
+
+48 *
+
+Math.sin(
+
+((phase - 5) / 11)
+
+* Math.PI
+
+);
+
+}
+
+/* CRUISING */
+
+else if(phase < 24){
+
+gear = "D";
+
+speed =
+
+72 -
+
+8 *
+
+Math.sin(
+
+((phase - 16) / 8)
+
+* Math.PI
+
+);
+
+current =
+
+16 +
+
+4 *
+
+Math.sin(t);
+
+}
+
+/* REGEN */
+
+else if(phase < 30){
+
+gear = "D";
+
+speed =
+
+64 -
+
+((phase - 24) / 6)
+
+* 64;
+
+current =
+
+-8 -
+
+18 *
+
+Math.sin(
+
+((phase - 24) / 6)
+
+* Math.PI
+
+);
+
+}
+
+/* STOP */
+
+else{
+
+gear = "N";
+
+speed = 0;
+
+current = 0.2;
+
+}
+
+/* ===============================
+   VEHICLE VALUES
+================================ */
+
+let voltage =
+
+76.8
+
+- speed * 0.018
+
+- Math.max(current,0) * 0.01
+
++ Math.max(-current,0) * 0.004;
+
+let power =
+
+voltage *
+
+current /
+
+1000;
+
+let soc =
+
+87 -
+
+((t % 600) / 600)
+
+* 3;
+
+let range =
+
+Math.round(
+
+soc * 0.9
+
+);
+
+let rpm =
+
+Math.round(
+
+speed * 44.5
+
+);
+
+trip +=
+
+(speed / 3600)
+
+* 0.12;
+
+odo +=
+
+(speed / 3600)
+
+* 0.12;
+
+/* TEMPERATURE */
+
+let batteryTemp =
+
+34 +
+
+Math.max(current,0)
+
+* 0.025;
+
+let controllerTemp =
+
+39 +
+
+Math.abs(current)
+
+* 0.07;
+
+let motorTemp =
+
+42 +
+
+speed *
+
+0.07;
+
+/* EFFICIENCY */
+
+let efficiency = 0;
+
+if(speed > 5){
+
+efficiency =
+
+Math.max(
+
+10,
+
+Math.round(
+
+Math.max(power,0)
+
+* 1000
+
+/ speed
+
+)
+
+);
+
+}
+
+/* ===============================
+   CLOCK
+================================ */
+
+let now = new Date();
+
+let clockText =
+
+now.toLocaleTimeString(
+
+"id-ID",
+
+{
+
+hour:"2-digit",
+
+minute:"2-digit"
+
+}
+
+);
+
+/* ===============================
+   UPDATE UI
+================================ */
+
+document.getElementById("speed")
+.innerText =
+Math.round(speed);
+
+document.getElementById("gear")
+.innerText =
+gear;
+
+document.getElementById("soc")
+.innerText =
+Math.round(soc) + "%";
+
+document.getElementById("batfill")
+.style.width =
+soc + "%";
+
+document.getElementById("voltage")
+.innerText =
+voltage.toFixed(1) + " V";
+
+document.getElementById("current")
+.innerText =
+
+(current >= 0 ? "+" : "")
+
++
+
+current.toFixed(1)
+
++
+
+" A";
+
+document.getElementById("power")
+.innerText =
+
+Math.abs(power)
+.toFixed(2)
+
++
+
+" kW "
+
++
+
+(power < 0
+? "REGEN"
+: "DRIVE");
+
+document.getElementById("power")
+.style.color =
+
+power < 0
+
+? "var(--regen)"
+
+: "var(--accent)";
+
+document.getElementById("range")
+.innerText =
+range + " km";
+
+document.getElementById("rpm")
+.innerText =
+rpm;
+
+document.getElementById("trip")
+.innerText =
+trip.toFixed(1) + " km";
+
+document.getElementById("odo")
+.innerText =
+Math.round(odo) + " km";
+
+document.getElementById("batTemp")
+.innerText =
+batteryTemp.toFixed(0)
++
+"°C";
+
+document.getElementById("ctrlTemp")
+.innerText =
+controllerTemp.toFixed(0)
++
+"°C";
+
+document.getElementById("motorTemp")
+.innerText =
+motorTemp.toFixed(0)
++
+"°C";
+
+document.getElementById("eff")
+.innerText =
+efficiency +
+" Wh/km";
+
+document.getElementById("clock")
+.innerText =
+clockText;
+
+}
+
+/* ===============================
+   REFRESH RATE
+================================ */
+
+setInterval(
+updateDashboard,
+120
+);AA
+
+updateDashboard();
+
+</script>
+
+</body>
+</html>

@@ -2,7 +2,7 @@
  * =============================================
  * OTA VIA HTTP - WiFi Mode Support
  * =============================================
- * Endpoint: POST http://192.168.4.1/update
+ * Endpoint: POST http://192.168.8.1/update
  * Body: Raw binary firmware (.bin file)
  * =============================================
  */

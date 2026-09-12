@@ -5,7 +5,7 @@
  * Usage from Flutter/Dart:
  * 
  * final response = await http.post(
- *   Uri.parse('http://192.168.4.1/update'),
+ *   Uri.parse('http://192.168.8.1/update'),
  *   headers: {'Content-Type': 'application/octet-stream'},
  *   body: await firmwareFile.readAsBytes(),
  * );
